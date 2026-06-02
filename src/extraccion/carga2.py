@@ -3,7 +3,7 @@ import requests
 import pandas as pd
 from pathlib import Path
 
-ruta_destino = Path(__file__).resolve().parent.parent.parent / "data" / "raw"
+ruta_destino = Path(__file__).resolve().parent.parent.parent / "data" / "crudo"
 ruta_destino.mkdir(parents=True, exist_ok=True)
 
 print("Descargando...")
