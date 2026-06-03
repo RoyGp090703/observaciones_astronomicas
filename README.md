@@ -1,11 +1,8 @@
 # Observaciones astronómicas
-
 | Autor | Contacto |
 | :--- | :--- |
 | **Lina Nicole Reyes Nava** | linareyes@ciencias.unam.mx  |
 | **Rodrigo García Peláez** | rodrigo090703@ciencias.unam.mx |
-
----
 
 ## Descripción
 Este proyecto integra información proveniente de dos bases de datos oficiales de la NASA sobre Objetos Cercanos a la Tierra (**NEOs**, por sus siglas en inglés). El motor de procesamiento correlaciona los registros de ambas fuentes para generar un dataset unificado, consolidando únicamente los registros coincidentes para un análisis más preciso.
@@ -21,7 +18,6 @@ Una vez consolidado el conjunto de datos, se lleva a cabo un análisis multidime
 El proyecto procesa los resultados y utiliza diferentes técnicas de graficación para una clara interpretación de los resultados.
 
 ## Estructura del repositorio
-
 ```text
 ├── data/
 │   ├── crudo/                        # Archivos fuente sin procesar
@@ -38,6 +34,11 @@ El proyecto procesa los resultados y utiliza diferentes técnicas de graficació
     └── transformacion/               # Lógica de procesamiento
         └── unión.py                  # Script principal de unificación
 ```
-dsdsdsd
+
+## Fuentes de datos
+| Fuente | URL | Descripción |
+| :--- | :--- | :--- |
+| **NeoWs (API)** | [apify.com](https://apify.com/compute-edge/nasa-neo-scraper) | Provee datos cinemáticos, incluyendo velocidad relativa y distancia a la Tierra y fechas de observación. También contiene clasificaciones de riesgo. |
+| **Small-Body DB** | [ssd.jpl.nasa.gov](https://ssd.jpl.nasa.gov/tools/sbdb_query.html#!#results) | Repositorio con propiedades físicas del asteroide como diámetro y magnitud absoluta, excentricidad, etc. Además contiene datos de observaciones. |
 
 
