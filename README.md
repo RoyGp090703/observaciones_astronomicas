@@ -113,14 +113,15 @@ Para facilitar la visualización y el análisis estadístico, se aplicaron trans
 ### 3. Integración Geométrica
 Para la modelación 3D en `src/analisis/trayectorias.py`, se transformaron los elementos keplerianos ($a, e, i, \Omega, \omega$) a coordenadas cartesianas ($x, y, z$) en el plano eclíptico mediante:
 * **Cálculo del radio vector ($r$):** Se determinó la distancia radial en función de la inclinación verdadera ($\theta$) utilizando la ecuación de la elipse:
+
   $$r = \frac{a(1 - e^2)}{1 + e \cos(\theta)}$$
   Donde $a$ es el semieje mayor y $e$ la excentricidad.
 
 * **Coordenadas en el plano orbital:** Se obtuvieron las coordenadas bidimensionales:
+
   $$x_{plan} = r \cos(\theta), \quad y_{plan} = r \sin(\theta)$$
 
-* **Transformación al plano eclíptico:** Se aplicó una matriz de rotación compuesta para ajustar la orientación del asteroide respecto al Sol, considerando la inclinación ($i$), el argumento del perihelio ($\omega$) y la longitud del nodo ascendente ($\Omega$):
-  $$\begin{bmatrix} x_{ecl} \\ y_{ecl} \\ z_{ecl} \end{bmatrix} = \mathbf{R}_z(\Omega) \mathbf{R}_x(i) \mathbf{R}_z(\omega) \begin{bmatrix} x_{plan} \\ y_{plan} \\ 0 \end{bmatrix}$$
+* **Transformación al plano eclíptico:** Se aplicó una matriz de rotación compuesta para ajustar la orientación del asteroide respecto al Sol, considerando la inclinación ($i$), el argumento del perihelio ($\omega$) y la longitud del nodo ascendente ($\Omega$)
 
 ## Resultados
    <p align="center">
