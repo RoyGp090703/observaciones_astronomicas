@@ -21,7 +21,10 @@ El proyecto procesa los resultados y utiliza diferentes técnicas de graficació
 ```text
 ├── data/
 │   ├── crudo/                        # Archivos fuente sin procesar
+        ├── nasa_neo1.csv             # Dataset de NeoWs API
+        └── nasa_neo2.csv             # Dataset de Small-Body DB
 │   └── procesado/                    # Datasets limpios para el análisis
+        └── nasa_neo_unido.csv        # Dataset unificado listo para trabajar
 ├── resultados/                       # Salidas gráficas
 └── src/                              # Código fuente del proyecto
     ├── analisis/                     # Scripts dedicados al estudio de datos
