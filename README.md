@@ -3,6 +3,7 @@
 | :---: | :---: | :---: |
 | **Lina Nicole Reyes Nava** | 320209756 | [linareyes@ciencias.unam.mx](mailto:linareyes@ciencias.unam.mx) |
 | **Rodrigo García Peláez** | 422059684 | [rodrigo090703@ciencias.unam.mx](mailto:rodrigo090703@ciencias.unam.mx) |
+| **Abril Melanie Flores Ochoa** | 322177099 | [abrilmelanie@ciencias.unam.mx](mailto:abrilmelanie@ciencias.unam.mx) |
 
 ## Repositorio
 El proyecto completo y su historial de versiones se encuentran [aquí](https://github.com/RoyGp090703/observaciones_astronomicas).
