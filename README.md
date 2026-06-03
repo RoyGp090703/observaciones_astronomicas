@@ -4,6 +4,9 @@
 | **Lina Nicole Reyes Nava** | 320209756 | [linareyes@ciencias.unam.mx](mailto:linareyes@ciencias.unam.mx) |
 | **Rodrigo García Peláez** | 422059684 | [rodrigo090703@ciencias.unam.mx](mailto:rodrigo090703@ciencias.unam.mx) |
 
+## Repositorio
+El proyecto completo y su historial de versiones se encuentran [aquí](https://github.com/RoyGp090703/observaciones_astronomicas).
+
 ## Descripción
 Este proyecto integra información proveniente de dos bases de datos oficiales de la NASA sobre Objetos Cercanos a la Tierra (**NEOs**, por sus siglas en inglés). El motor de procesamiento correlaciona los registros de ambas fuentes para generar un dataset unificado, consolidando únicamente los registros coincidentes para un análisis más preciso.
 
