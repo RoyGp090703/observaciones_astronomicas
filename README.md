@@ -21,15 +21,20 @@ El proyecto procesa los resultados y utiliza diferentes técnicas de graficació
 ```text
 ├── data/
 │   ├── crudo/                        # Archivos fuente sin procesar
-        ├── nasa_neo1.csv             # Dataset de NeoWs API
-        └── nasa_neo2.csv             # Dataset de Small-Body DB
+│   │   ├── nasa_neo1.csv             # Dataset de NeoWs API
+│   │   └── nasa_neo2.csv             # Dataset de Small-Body DB
 │   └── procesado/                    # Datasets limpios para el análisis
-        └── nasa_neo_unido.csv        # Dataset unificado listo para trabajar
+│       └── nasa_neo_unido.csv        # Dataset unificado listo para trabajar
 ├── resultados/                       # Salidas gráficas
+│   ├── brillo_vs_tamanho.png         # Relación brillo - diámetro
+│   ├── distancia_vs_velocidad.png    # Relación distancia - velocidad - diámetro
+│   ├── trayectoria_vista1.png        # Vista isométrica de las trayectorias de los 5 asteroides de mayor diámetro
+│   ├── trayectoria_vista2.png        # Vista superior de las trayectorias de los 5 asteroides de mayor diámetro
+│   └── trayectoria_vista3.png        # Vista lateral de las trayectorias de los 5 asteroides de mayor diámetro
 └── src/                              # Código fuente del proyecto
     ├── analisis/                     # Scripts dedicados al estudio de datos
-    │   ├── brillo_vs_tamanho.py      # Relación brillo - diámetro
-    │   ├── distancia_vs_velocidad.py # Relación distancia - velocidad - diámetro
+    │   ├── brillo_vs_tamanho.py      # Graficación de la relación brillo - diámetro
+    │   ├── distancia_vs_velocidad.py # Graficación de la relación distancia - velocidad - diámetro
     │   └── trayectorias.py           # Modelado de trayectorias de los 5 asteroides de mayor diámetro
     ├── extraccion/                   # Módulos de carga de datos
     │   ├── carga1.py                 # Extracción de datos de NeoWs API
@@ -88,3 +93,52 @@ El proyecto procesa los resultados y utiliza diferentes técnicas de graficació
 | `moid` | `float64` | Distancia mínima de intersección con la órbita terrestre (UA). |
 | `condition_code` | `float64` | Código de calidad del ajuste orbital (0 = mejor ajuste). |
 | `n_obs_used` | `int64` | Cantidad total de observaciones usadas para el cálculo orbital. |
+
+## Manejo y Procesamiento de Datos
+El proceso de manipulación de datos se divide en tres fases críticas:
+
+### 1. Limpieza y Homologación
+Dado que los datos provienen de fuentes distintas, se ejecutaron las siguientes acciones en los scripts de `src/transformacion/`:
+* **Gestión de nulos:** Se eliminaron registros incompletos (`dropna`) en variables críticas como `diameter`, `absoluteMagnitude` y parámetros orbitales, asegurando que los modelos estadísticos no se vean afectados por datos faltantes.
+* **Limpieza de cadenas:** Se aplicó `str.strip()` a los identificadores de nombre para eliminar espacios en blanco y asegurar que el *merge* entre datasets sea exitoso.
+* **Conversión de tipos:** Se forzó la conversión de cadenas de texto a valores numéricos (`pd.to_numeric`) mediante el parámetro `errors='coerce'`, lo que permite tratar errores de formato como valores nulos de forma controlada.
+
+### 2. Normalización de Variables
+Para facilitar la visualización y el análisis estadístico, se aplicaron transformaciones:
+* **Conversión de unidades:** Se escaló el diámetro de kilómetros a metros (`diameter * 1000`) para mejorar la resolución visual en algunos gráficos.
+* **Escalado de brillo:** Se normalizó la magnitud absoluta ($H$) en un rango $[0, 1]$ para representar el brillo de manera más comprensible:
+  $$H_{brillo\_norm} = \frac{H_{max} - H}{H_{max} - H_{min}}$$
+* **Normalización de distancia:** La distancia de aproximación (`missDistanceKm`) se escaló en factores de $10^7$ para simplificar la interpretación en el eje cartesiano.
+
+### 3. Integración Geométrica
+Para la modelación 3D en `src/analisis/trayectorias.py`, se transformaron los elementos keplerianos ($a, e, i, \Omega, \omega$) a coordenadas cartesianas ($x, y, z$) en el plano eclíptico mediante:
+* **Cálculo del radio vector ($r$):** Se determinó la distancia radial en función de la inclinación verdadera ($\theta$) utilizando la ecuación de la elipse:
+  $$r = \frac{a(1 - e^2)}{1 + e \cos(\theta)}$$
+  Donde $a$ es el semieje mayor y $e$ la excentricidad.
+
+* **Coordenadas en el plano orbital:** Se obtuvieron las coordenadas bidimensionales:
+  $$x_{plan} = r \cos(\theta), \quad y_{plan} = r \sin(\theta)$$
+
+* **Transformación al plano eclíptico:** Se aplicó una matriz de rotación compuesta para ajustar la orientación del asteroide respecto al Sol, considerando la inclinación ($i$), el argumento del perihelio ($\omega$) y la longitud del nodo ascendente ($\Omega$):
+  $$\begin{bmatrix} x_{ecl} \\ y_{ecl} \\ z_{ecl} \end{bmatrix} = \mathbf{R}_z(\Omega) \mathbf{R}_x(i) \mathbf{R}_z(\omega) \begin{bmatrix} x_{plan} \\ y_{plan} \\ 0 \end{bmatrix}$$
+
+## Resultados
+   <p align="center">
+  <img src="resultados/brillo_vs_tamanho.png" alt="Relación entre el brillo de un asteroide y su tamaño." width="800">
+</p>
+
+<p align="center">
+  <img src="resultados/distancia_vs_velocidad.png" alt="Relación entre la distancia a la Tierra, velocidad y tamaño del asteroide." width="800">
+</p>
+
+<p align="center">
+  <img src="resultados/trayectoria_vista1.png" alt="Vista isométrica de los 5 asteroides con mayor diámetro." width="800">
+</p>
+
+<p align="center">
+  <img src="resultados/trayectoria_vista2.png" alt="Vista superior de los 5 asteroides con mayor diámetro." width="800">
+</p>
+
+<p align="center">
+  <img src="resultados/trayectoria_vista3.png" alt="Vista lateral de los 5 asteroides con mayor diámetro." width="800">
+</p>
