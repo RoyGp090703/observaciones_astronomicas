@@ -94,25 +94,25 @@ El proyecto procesa los resultados y utiliza diferentes técnicas de graficació
 | `condition_code` | `float64` | Código de calidad del ajuste orbital (0 = mejor ajuste). |
 | `n_obs_used` | `int64` | Cantidad total de observaciones usadas para el cálculo orbital. |
 
-## Manejo y Procesamiento de Datos
+## Manejo y procesamiento de datos
 El proceso de manipulación de datos se divide en tres fases críticas:
 
-### 1. Limpieza y Homologación
+### 1. Limpieza y homologación
 Dado que los datos provienen de fuentes distintas, se ejecutaron las siguientes acciones en los scripts de `src/transformacion/`:
 * **Gestión de nulos:** Se eliminaron registros incompletos (`dropna`) en variables críticas como `diameter`, `absoluteMagnitude` y parámetros orbitales, asegurando que los modelos estadísticos no se vean afectados por datos faltantes.
 * **Limpieza de cadenas:** Se aplicó `str.strip()` a los identificadores de nombre para eliminar espacios en blanco y asegurar que el *merge* entre datasets sea exitoso.
 * **Conversión de tipos:** Se forzó la conversión de cadenas de texto a valores numéricos (`pd.to_numeric`) mediante el parámetro `errors='coerce'`, lo que permite tratar errores de formato como valores nulos de forma controlada.
 
-### 2. Normalización de Variables
+### 2. Normalización de variables
 Para facilitar la visualización y el análisis estadístico, se aplicaron transformaciones:
 * **Conversión de unidades:** Se escaló el diámetro de kilómetros a metros (`diameter * 1000`) para mejorar la resolución visual en algunos gráficos.
 * **Escalado de brillo:** Se normalizó la magnitud absoluta ($H$) en un rango $[0, 1]$ para representar el brillo de manera más comprensible:
 
   $$H_{brillo\_norm} = \frac{H_{max} - H}{H_{max} - H_{min}}$$
-  
+
 * **Normalización de distancia:** La distancia de aproximación (`missDistanceKm`) se escaló en factores de $10^7$ para simplificar la interpretación en el eje cartesiano.
 
-### 3. Integración Geométrica
+### 3. Integración geométrica
 Para la modelación 3D en `src/analisis/trayectorias.py`, se transformaron los elementos keplerianos ($a, e, i, \Omega, \omega$) a coordenadas cartesianas ($x, y, z$) en el plano eclíptico mediante:
 * **Cálculo del radio vector ($r$):** Se determinó la distancia radial en función de la inclinación verdadera ($\theta$) utilizando la ecuación de la elipse:
 
