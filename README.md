@@ -24,18 +24,20 @@ El proyecto procesa los resultados y utiliza diferentes técnicas de graficació
 
 ```text
 ├── data/
-│   ├── crudo/               # Archivos fuente sin procesar
-│   └── procesado/           # Datasets listos para el análisis
-├── resultados/              # Salidas gráficas del análisis
-└── src/                     # Código fuente del proyecto
-    ├── analisis/            # Scripts para el procesamiento y graficación
-    │   ├── brillo_vs_tamanho.py
-    │   ├── distancia_vs_velocidad.py
-    │   └── trayectorias.py
-    ├── extraccion/          # Scripts de carga de datos vía API
-    │   ├── carga1.py
-    │   └── carga2.py
-    └── transformacion/      # Scripts para la unión de los datasets crudos
-        └── unión.py
+│   ├── crudo/                        # Archivos fuente sin procesar
+│   └── procesado/                    # Datasets limpios para el análisis
+├── resultados/                       # Salidas gráficas
+└── src/                              # Código fuente del proyecto
+    ├── analisis/                     # Scripts dedicados al estudio de datos
+    │   ├── brillo_vs_tamanho.py      # Relación brillo - diámetro
+    │   ├── distancia_vs_velocidad.py # Relación distancia - velocidad - diámetro
+    │   └── trayectorias.py           # Modelado de trayectorias de los 5 asteroides de mayor diámetro
+    ├── extraccion/                   # Módulos de carga de datos
+    │   ├── carga1.py                 # Extracción de datos de NeoWs API
+    │   └── carga2.py                 # Extracción de datos de Small-Body DB
+    └── transformacion/               # Lógica de procesamiento
+        └── unión.py                  # Script principal de unificación
 ```
 dsdsdsd
+
+
