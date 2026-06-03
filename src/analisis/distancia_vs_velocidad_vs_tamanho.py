@@ -8,28 +8,29 @@ df = pd.read_csv("data/procesado/nasa_neo_unido.csv")
 columnas_req = ['diameter', 'missDistanceKm', 'closeApproachVelocityKmh']
 df_limpio = df.dropna(subset=columnas_req).copy()
 
-df_orbita = df_limpio[df_limpio['missDistanceKm'] < 75000000]
+df_orbita = df_limpio.copy()
+df_orbita['missDistance_norm'] = df_orbita['missDistanceKm'] / 1e7
 
 sns.set_theme(style="whitegrid")
 plt.figure(figsize=(12, 7))
 
 scatter = plt.scatter(
-    x=df_orbita['missDistanceKm'], 
+    x=df_orbita['missDistance_norm'], 
     y=df_orbita['closeApproachVelocityKmh'], 
     s=df_orbita['diameter'] * 50, 
-    alpha=0.5,
+    alpha=0.7,  
     c=df_orbita['diameter'], 
     cmap='viridis',
-    edgecolors='white',
+    edgecolors='black', 
     linewidths=0.5
 )
 
-plt.title("Análisis Orbital: Distancia vs Velocidad vs Tamaño", fontsize=15, fontweight='bold')
-plt.xlabel("Distancia de Proximidad a la Tierra (km)", fontsize=12)
-plt.ylabel("Velocidad de Proximidad (km/h)", fontsize=12)
+plt.title("Relación entre la distancia a la Tierra, velocidad y tamaño del asteroide", fontsize=15, fontweight='bold')
+plt.xlabel(r"Distancia a la Tierra ($10^7$ km)", fontsize=12)
+plt.ylabel("Velocidad de proximidad (km/h)", fontsize=12)
 
 cbar = plt.colorbar(scatter)
-cbar.set_label('Diámetro (km)', fontsize=11)
+cbar.set_label('Diámetro (km)', fontsize=12)
 
 plt.tight_layout()
 
