@@ -8,7 +8,7 @@
 El proyecto completo y su historial de versiones se encuentran [aquí](https://github.com/RoyGp090703/observaciones_astronomicas).
 
 ## Presentación
-La presentación del proyecto se encuentra [aquí](Presentación.pdf).
+La presentación del proyecto se encuentra [aquí](https://canva.link/w3ilyykwg3dxs9h).
 
 ## Descripción
 Este proyecto integra información proveniente de dos bases de datos oficiales de la NASA sobre Objetos Cercanos a la Tierra (**NEOs**, por sus siglas en inglés). El motor de procesamiento correlaciona los registros de ambas fuentes para generar un dataset unificado, consolidando únicamente los registros coincidentes para un análisis más preciso.
