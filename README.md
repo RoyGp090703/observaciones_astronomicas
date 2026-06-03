@@ -115,6 +115,7 @@ Para la modelación 3D en `src/analisis/trayectorias.py`, se transformaron los e
 * **Cálculo del radio vector ($r$):** Se determinó la distancia radial en función de la inclinación verdadera ($\theta$) utilizando la ecuación de la elipse:
 
   $$r = \frac{a(1 - e^2)}{1 + e \cos(\theta)}$$
+  
   Donde $a$ es el semieje mayor y $e$ la excentricidad.
 
 * **Coordenadas en el plano orbital:** Se obtuvieron las coordenadas bidimensionales:
