@@ -3,63 +3,56 @@ import requests
 import pandas as pd
 from pathlib import Path
 
-# Configuración de rutas y límites
-BASE_PATH = Path(__file__).resolve().parents[2]
-DATA_DIR = BASE_PATH / "data" / "crudo"
-DATA_DIR.mkdir(parents=True, exist_ok=True)
+# Configuración de ruta y creación de directorio
+ruta_destino = Path(__file__).resolve().parent.parent.parent / "data" / "crudo"
+ruta_destino.mkdir(parents=True, exist_ok=True)
 
-API_KEY = "k9FkbUhAZgRdiZ2C8jHeTOkxpZqmUDND71prUdjX"
-BASE_URL = "https://api.nasa.gov/neo/rest/v1/neo/browse"
-MAX_RECORDS = 2000
+print("Descargando...")
 
-def fetch_neo_data():
-    """Extrae datos de la API de NASA NeoWs manejando paginación."""
-    url = f"{BASE_URL}?api_key={API_KEY}"
-    extracted_data = []
+CLAVE_API = "k9FkbUhAZgRdiZ2C8jHeTOkxpZqmUDND71prUdjX"
+url = f"https://api.nasa.gov/neo/rest/v1/neo/browse?api_key={CLAVE_API}"
+REGISTROS_MAXIMOS = 2000
+datos = []
 
-    print(f"Iniciando extracción de hasta {MAX_RECORDS} registros...")
-
-    while url and len(extracted_data) < MAX_RECORDS:
-        response = requests.get(url)
-        response.raise_for_status()  # Detecta errores HTTP automáticamente
-        payload = response.json()
-        
-        for neo in payload.get("near_earth_objects", []):
-            if len(extracted_data) >= MAX_RECORDS:
-                break
-            
-            # Normalización de datos anidados para aplanamiento estructural
-            approach_data = neo.get("close_approach_data", [{}])[0]
-            diameter = neo.get("estimated_diameter", {}).get("kilometers", {})
-            velocity = approach_data.get("relative_velocity", {})
-            distance = approach_data.get("miss_distance", {})
-            
-            extracted_data.append({
-                "id": neo.get("id"),
-                "name": neo.get("name"),
-                "nasaJplUrl": neo.get("nasa_jpl_url"),
-                "absoluteMagnitude": neo.get("absolute_magnitude_h"),
-                "estimatedDiameterMinKm": diameter.get("estimated_diameter_min"),
-                "estimatedDiameterMaxKm": diameter.get("estimated_diameter_max"),
-                "isPotentiallyHazardous": neo.get("is_potentially_hazardous_asteroid"),
-                "isSentryObject": neo.get("is_sentry_object"),
-                "closeApproachDate": approach_data.get("close_approach_date"),
-                "closeApproachVelocityKmh": velocity.get("kilometers_per_hour"),
-                "missDistanceKm": distance.get("kilometers"),
-                "orbitingBody": approach_data.get("orbiting_body")
-            })
-        
-        # Navegación hacia la siguiente página del set de datos
-        url = payload.get("links", {}).get("next")
-        time.sleep(1) # Respeto al rate-limiting del servidor
-
-    return extracted_data
-
-if __name__ == "__main__":
-    neo_dataset = fetch_neo_data()
+# Extracción mediante paginación de la API
+while url and len(datos) < REGISTROS_MAXIMOS:
+    respuesta = requests.get(url).json()
     
-    # Persistencia en formato tabular optimizado
-    output_file = DATA_DIR / "nasa_neo1.csv"
-    pd.DataFrame(neo_dataset).to_csv(output_file, index=False, encoding='utf-8')
+    for neo in respuesta.get("near_earth_objects", []):
+        if len(datos) >= REGISTROS_MAXIMOS:
+            break
+            
+        # Extracción segura de datos anidados
+        cercanos_crudo = neo.get("close_approach_data", [])
+        cercanos_data = cercanos_crudo[0] if cercanos_crudo else {}
+        
+        diametro = neo.get("estimated_diameter", {}).get("kilometers", {})
+        velocidad = cercanos_data.get("relative_velocity", {})
+        distancia = cercanos_data.get("miss_distance", {})
+        
+        # Mapeo de campos al dataset
+        datos.append({
+            "id": neo.get("id"),
+            "name": neo.get("name"),
+            "nasaJplUrl": neo.get("nasa_jpl_url"),
+            "absoluteMagnitude": neo.get("absolute_magnitude_h"),
+            "estimatedDiameterMinKm": diametro.get("estimated_diameter_min"),
+            "estimatedDiameterMaxKm": diametro.get("estimated_diameter_max"),
+            "isPotentiallyHazardous": neo.get("is_potentially_hazardous_asteroid"),
+            "isSentryObject": neo.get("is_sentry_object"),
+            "closeApproachDate": cercanos_data.get("close_approach_date"),
+            "closeApproachVelocityKmh": velocidad.get("kilometers_per_hour"),
+            "missDistanceKm": distancia.get("kilometers"),
+            "orbitingBody": cercanos_data.get("orbiting_body")
+        })
     
-    print(f"Proceso completado. Dataset guardado en: {output_file}")
+    # Navegación a la siguiente página y pausa de seguridad
+    url = respuesta.get("links", {}).get("next")
+    time.sleep(1)
+
+# Persistencia de datos en formato CSV
+df_neo = pd.DataFrame(datos)
+archivo_final = ruta_destino / "nasa_neo1.csv"
+df_neo.to_csv(archivo_final, index=False, encoding='utf-8')
+
+print(f" Archivo guardado en: {archivo_final}")
