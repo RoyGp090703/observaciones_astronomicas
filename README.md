@@ -107,7 +107,9 @@ Dado que los datos provienen de fuentes distintas, se ejecutaron las siguientes 
 Para facilitar la visualización y el análisis estadístico, se aplicaron transformaciones:
 * **Conversión de unidades:** Se escaló el diámetro de kilómetros a metros (`diameter * 1000`) para mejorar la resolución visual en algunos gráficos.
 * **Escalado de brillo:** Se normalizó la magnitud absoluta ($H$) en un rango $[0, 1]$ para representar el brillo de manera más comprensible:
+
   $$H_{brillo\_norm} = \frac{H_{max} - H}{H_{max} - H_{min}}$$
+  
 * **Normalización de distancia:** La distancia de aproximación (`missDistanceKm`) se escaló en factores de $10^7$ para simplificar la interpretación en el eje cartesiano.
 
 ### 3. Integración Geométrica
@@ -115,7 +117,7 @@ Para la modelación 3D en `src/analisis/trayectorias.py`, se transformaron los e
 * **Cálculo del radio vector ($r$):** Se determinó la distancia radial en función de la inclinación verdadera ($\theta$) utilizando la ecuación de la elipse:
 
   $$r = \frac{a(1 - e^2)}{1 + e \cos(\theta)}$$
-  
+
   Donde $a$ es el semieje mayor y $e$ la excentricidad.
 
 * **Coordenadas en el plano orbital:** Se obtuvieron las coordenadas bidimensionales:
